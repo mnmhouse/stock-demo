@@ -10,7 +10,7 @@ public class Stock implements Serializable {
 	private static final long serialVersionUID = 623541717003512683L;
 
 	private String open = "3253.85";
-	private String current = "3243.85";
+	private String current = "3254.85";
 	private String last_close = "3246.45";
 	private String hign = "3262.09";
 	private String low = "3251.46";

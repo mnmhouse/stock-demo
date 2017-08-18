@@ -1,4 +1,4 @@
-package com.putact.disruptor;
+package com.putact.websocket;
 
 import java.nio.ByteBuffer;
 

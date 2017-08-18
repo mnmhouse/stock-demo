@@ -61,13 +61,9 @@ public class StockEventExecutor {
 		Disruptor<Stock> disruptor = new Disruptor<>(Stock::new, bufferSize, executor);
 
 		// Executor that will be used to construct new threads for consumers
-		// 可以使用lambda来注册一个EventHandler
 
 		disruptor.handleEventsWith(stockHandler);
 
-		// disruptor.handleEventsWith((event, sequence, endOfBatch) ->
-		// System.out.println("Event: " + event.getHign()));
-		// Start the Disruptor, starts all threads running
 		disruptor.start();
 		// Get the ring buffer from the Disruptor to be used for publishing.
 		RingBuffer<Stock> ringBuffer = disruptor.getRingBuffer();
@@ -76,7 +72,7 @@ public class StockEventExecutor {
 
 		for (int l = 0; true; l++) {
 			Stock tock = new Stock();
-			double result = Double.parseDouble(tock.getCurrent()) + NumberHelper.getRamdom(10);
+			double result = Double.parseDouble(tock.getCurrent()) + NumberHelper.getRamdom(100);
 			tock.setCurrent(result + "");
 			producer.onData(tock);
 
@@ -84,8 +80,10 @@ public class StockEventExecutor {
 		}
 	}
 
-	// public static void stopTask() throws InterruptedException {
-	// disruptor.shutdown();
-	// }
+	public Stock constructStockData() {
+		Stock stock = new Stock();
+
+		return stock;
+	}
 
 }

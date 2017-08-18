@@ -8,6 +8,9 @@
 
 二、技术分析
 
-1、javaweb服务采用eclipse创建一个基于tomcat容器java web服务，使用maven进行包的管理，使用git进行版本管理。
+1、javaweb服务采用eclipse创建一个java web服务，使用maven进行包的管理，使用git进行版本管理，运行需要部署到tomcat上进行。
 2、前后端通信可以采取Ajax http请求，这里采用websocket通信，服务器可以主动向客户端推送信息，客户端也可以主动向服务器发送信息,这样保障数据实时性。
 3、Disruptor封装stock信息，通过一个for循环不停模拟股票交易数据。
+
+
+三、

@@ -1,9 +1,6 @@
 package com.putact.websocket;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.websocket.OnClose;
@@ -13,13 +10,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.json.JSONObject;
-
-import com.putact.bean.Stock;
 import com.putact.disruptor.StockEventExecutor;
-import com.putact.disruptor.StockEventMainJava;
-import com.putact.util.JsonHelper;
-import com.putact.util.TimezoneUtil;
 
 //该注解用来指定一个URI，客户端可以通过这个URI来连接到WebSocket。类似Servlet的注解mapping。无需在web.xml中配置。
 @ServerEndpoint("/stocksocket")
@@ -47,6 +38,7 @@ public class WebSocketStock {
 
 		addOnlineCount(); // 在线数加1
 		System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+		StockEventExecutor.getInstance().setWebSocketSet(webSocketSet);
 
 	}
 
@@ -73,8 +65,6 @@ public class WebSocketStock {
 	public void onMessage(String message, Session session) throws InterruptedException {
 		System.out.println("来自客户端的消息:" + message);
 
-		// StockEventMainJava.sendAllData(webSocketSet);
-		StockEventExecutor.getInstance().setWebSocketSet(webSocketSet);
 	}
 
 	/**
@@ -110,18 +100,6 @@ public class WebSocketStock {
 
 	public static synchronized void subOnlineCount() {
 		WebSocketStock.onlineCount--;
-	}
-
-	public void constructData() {
-
-		String respose = JsonHelper.toJson(new Stock());
-		try {
-			sendMessage(respose);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

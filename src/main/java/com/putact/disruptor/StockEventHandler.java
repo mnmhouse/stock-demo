@@ -23,10 +23,7 @@ public class StockEventHandler implements EventHandler<Stock> {
 		String respose = JsonHelper.toJson(event);
 
 		for (WebSocketStock webSocketStock : this.webSocketSet) {
-
 			webSocketStock.sendMessage(respose);
-
 		}
-		System.out.println("Event: " + event.getHigh52week());
 	}
 }

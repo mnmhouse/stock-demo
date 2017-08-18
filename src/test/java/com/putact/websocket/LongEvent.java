@@ -1,4 +1,4 @@
-package com.putact.disruptor;
+package com.putact.websocket;
 
 public class LongEvent {
 

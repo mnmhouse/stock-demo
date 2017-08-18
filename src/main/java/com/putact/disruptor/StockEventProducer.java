@@ -1,7 +1,5 @@
 package com.putact.disruptor;
 
-import java.nio.ByteBuffer;
-
 import com.lmax.disruptor.RingBuffer;
 import com.putact.bean.Stock;
 
@@ -12,12 +10,12 @@ public class StockEventProducer {
 		this.ringBuffer = ringBuffer;
 	}
 
-	public void onData(Stock bb) {
+	public void onData(Stock stock) {
 		long sequence = ringBuffer.next();
 
 		try {
 			Stock event = ringBuffer.get(sequence);
-			 event.setCurrent(bb.getCurrent());
+			event.setCurrent(stock.getCurrent());
 		} finally {
 			ringBuffer.publish(sequence);
 		}
