@@ -8,6 +8,13 @@
 	<name>stock-demo Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.lmax</groupId>
@@ -34,5 +41,18 @@
 	</dependencies>
 	<build>
 		<finalName>stock-demo</finalName>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+
+			</plugin>
+		</plugins>
 	</build>
 </project>

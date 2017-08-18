@@ -16,7 +16,6 @@ public class StockEventMainJava {
 	public static int bufferSize = 1024;// Construct the Disruptor
 
 	public static Executor executor = Executors.newCachedThreadPool();
-	public static Disruptor<Stock> disruptor = new Disruptor<>(Stock::new, bufferSize, executor);
 	public static StockEventHandler stockHandler = new StockEventHandler();
 
 	public static void sendAllData(CopyOnWriteArraySet<WebSocketStock> webSocketSet) throws InterruptedException {
@@ -24,7 +23,8 @@ public class StockEventMainJava {
 		// Executor that will be used to construct new threads for consumers
 		Executor executor = Executors.newCachedThreadPool();
 		int bufferSize = 1024;// Construct the Disruptor
-		Disruptor<Stock> disruptor = new Disruptor<>(Stock::new, bufferSize, executor);
+		Disruptor<Stock> disruptor = null;
+		// new Disruptor<>(Stock::new, bufferSize, executor);
 		// 可以使用lambda来注册一个EventHandler
 
 		stockHandler.setWebSocketSet(webSocketSet);
@@ -47,10 +47,6 @@ public class StockEventMainJava {
 
 			Thread.sleep(1000);
 		}
-	}
-
-	public static void stopTask() throws InterruptedException {
-		disruptor.shutdown();
 	}
 
 }
