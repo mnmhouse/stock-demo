@@ -19,8 +19,8 @@
 	<br />
 	<input id="text" type="text" />
 	<button onclick="send()">订阅</button>
-	<button onclick="closeWebSocket()">Close</button>
-
+	<!-- 	<button onclick="closeWebSocket()">Close</button>
+ -->
 	<div class="stockTitle">
 		<div class="topName">
 			<span class="stockName"><strong
@@ -112,7 +112,7 @@
 												}
 											},
 											title : {
-												text : '动态模拟实时数据'
+												text : '动态模拟股票实时数据'
 											},
 											xAxis : {
 												type : 'datetime',
@@ -216,20 +216,15 @@
 
 		/* 		document.getElementById('message').innerHTML += data + '<br/>';
 		 */
+		var startDate = new Date().Format('yyyy-MM-dd hh:mm:ss');
 		document.getElementsByTagName("strong")[1].innerHTML = json.current;
 		document.getElementById("today_open").innerHTML = json.open;
 		document.getElementById("last_close").innerHTML = json.last_close;
 		document.getElementById("quote-high").innerHTML = json.hign;
 		document.getElementById("quote-low").innerHTML = json.low;
 
-		var res = [], time = (new Date()).getTime(), i;
-		for ( var one_data in json) {
-			res.push({
-				x : time,
-				y : parseFloat(response[one_data])
-			});
-		}
-		set_chart(res);
+		document.getElementById("timeInfo").innerHTML = startDate + "(北京时间)";
+
 	}
 
 	//关闭连接
@@ -243,55 +238,25 @@
 		websocket.send(message);
 	}
 
-	function set_chart(data) {
-		Highcharts.setOptions({
-			global : {
-				useUTC : false
-			}
-		});
-		/**
-		 * Highcharts 在 4.2.0 开始已经不依赖 jQuery 了，直接用其构造函数既可创建图表
-		 **/
-		var chart = new Highcharts.Chart('container', {
-			title : {
-				text : '股票价格图表',
-				x : -20
-			},
-			subtitle : {
-				text : '',
-				x : -20
-			},
-			xAxis : {
-				type : 'datetime',
-				title : {
-					text : null
-				},
-				format : 'yyyy-MM-dd hh:mm:ss'
-			},
-			yAxis : {
-				title : {
-					text : '%'
-				},
-				plotLines : [ {
-					value : 0,
-					width : 1,
-					color : '#808080'
-				} ]
-			},
-			tooltip : {
-				valueSuffix : ''
-			},
-			legend : {
-				layout : 'vertical',
-				align : 'right',
-				verticalAlign : 'middle',
-				borderWidth : 0
-			},
-			series : [ {
-				name : '抽取率',
-				data : data
-			} ]
-		});
+	Date.prototype.Format = function(fmt) { //author: meizz 
+		var o = {
+			"M+" : this.getMonth() + 1, //月份 
+			"d+" : this.getDate(), //日 
+			"h+" : this.getHours(), //小时 
+			"m+" : this.getMinutes(), //分 
+			"s+" : this.getSeconds(), //秒 
+			"q+" : Math.floor((this.getMonth() + 3) / 3), //季度 
+			"S" : this.getMilliseconds()
+		//毫秒 
+		};
+		if (/(y+)/.test(fmt))
+			fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "")
+					.substr(4 - RegExp.$1.length));
+		for ( var k in o)
+			if (new RegExp("(" + k + ")").test(fmt))
+				fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k])
+						: (("00" + o[k]).substr(("" + o[k]).length)));
+		return fmt;
 	}
 </script>
 </html>

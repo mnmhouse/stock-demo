@@ -16,6 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 
 import com.putact.bean.Stock;
+import com.putact.disruptor.StockEventExecutor;
 import com.putact.disruptor.StockEventMainJava;
 import com.putact.util.JsonHelper;
 import com.putact.util.TimezoneUtil;
@@ -23,6 +24,7 @@ import com.putact.util.TimezoneUtil;
 //该注解用来指定一个URI，客户端可以通过这个URI来连接到WebSocket。类似Servlet的注解mapping。无需在web.xml中配置。
 @ServerEndpoint("/stocksocket")
 public class WebSocketStock {
+
 	// 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	private static int onlineCount = 0;
 	// concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
@@ -42,9 +44,10 @@ public class WebSocketStock {
 
 		this.session = session;
 		webSocketSet.add(this); // 加入set中
+
 		addOnlineCount(); // 在线数加1
 		System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
-		constructData();
+
 	}
 
 	/**
@@ -64,25 +67,14 @@ public class WebSocketStock {
 	 *            客户端发送过来的消息
 	 * @param session
 	 *            可选的参数
+	 * @throws InterruptedException
 	 */
 	@OnMessage
-	public void onMessage(String message, Session session) {
+	public void onMessage(String message, Session session) throws InterruptedException {
 		System.out.println("来自客户端的消息:" + message);
-		try {
-			StockEventMainJava.sendAllData(webSocketSet);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		// 群发消息
-		// for (WebSocketStock item : webSocketSet) {
-		// try {
-		// item.sendMessage(message);
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// continue;
-		// }
-		// }
+
+		// StockEventMainJava.sendAllData(webSocketSet);
+		StockEventExecutor.getInstance().setWebSocketSet(webSocketSet);
 	}
 
 	/**

@@ -22,7 +22,7 @@ public class StockEventHandler implements EventHandler<Stock> {
 	public void onEvent(Stock event, long sequence, boolean endOfBatch) throws Exception {
 		String respose = JsonHelper.toJson(event);
 
-		for (WebSocketStock webSocketStock : webSocketSet) {
+		for (WebSocketStock webSocketStock : this.webSocketSet) {
 
 			webSocketStock.sendMessage(respose);
 
